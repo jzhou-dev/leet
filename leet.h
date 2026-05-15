@@ -7,6 +7,7 @@
 #include <map>
 #include <functional>
 #include <set>
+#include <stack>
 #include <utility>
 #include <iostream>
 using namespace std;
