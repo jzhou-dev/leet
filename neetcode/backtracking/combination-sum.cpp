@@ -4,23 +4,26 @@ class Solution {
 public:
     vector<vector<int>> result;
     vector<vector<int>> combinationSum(vector<int>& nums, int target) {
-        vector<int> sum_nums;
-        combinationSum(nums, sum_nums, 0, target, 0);
+        vector<int> combination;
+        backtrack(nums, combination, 0, target);
         return result;
     }
-
-    void combinationSum(vector<int>& nums, vector<int>& sum_nums, int sum, int target, int i) {
-        if (i > nums.size() - 1 || sum >= target) {
-            if (sum == target) {
-                result.push_back(sum_nums);
+    void backtrack(vector<int>& nums, vector<int>& combination, int start, int target) {
+        if (target <= 0) {
+            if (target == 0) {
+                result.push_back(combination);
             }
             return;
         }
-        sum += nums[i];
-        sum_nums.push_back(nums[i]);
-        combinationSum(nums, sum_nums, sum, target, i);
-        sum -= nums[i];
-        sum_nums.pop_back();
-        combinationSum(nums, sum_nums, sum, target, i+1);
+        if (start > nums.size() - 1) {
+            return;
+        }
+
+        for (int i = start; i < nums.size(); i++) {
+            combination.push_back(nums[i]);
+            backtrack(nums, combination, i, target-nums[i]);
+            combination.pop_back();
+        }
     }
+
 };

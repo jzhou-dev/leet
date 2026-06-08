@@ -4,27 +4,28 @@ class Solution {
 public:
     vector<vector<int>> result;
     vector<vector<int>> combinationSum2(vector<int>& candidates, int target) {
-        vector<int> nums;
-        set<int> seen;
+        vector<int> combination;
         sort(candidates.begin(), candidates.end());
-        combinationSum2(candidates, nums, target, 0);
+        backtrack(candidates, combination, 0, target);
         return result;
     }
-    void combinationSum2(vector<int>& candidates, vector<int>& nums, int target, int i) {
-        if (i > candidates.size() - 1 || target <= 0) {
+    void backtrack(vector<int>& candidates, vector<int>& combination, int i, int target) {
+        if (target <= 0) {
             if (target == 0) {
-                result.push_back(nums);
+                result.push_back(combination);
             }
             return;
         }
-        target -= candidates[i];
-        nums.push_back(candidates[i]);
-        combinationSum2(candidates, nums, target, i+1);
-        target += candidates[i];
-        nums.pop_back();
-        while (i < candidates.size()-1 && candidates[i] == candidates[i+1]) {
+        if (i > candidates.size() - 1) {
+            return;
+        }
+        combination.push_back(candidates[i]);
+        backtrack(candidates, combination, i+1, target-candidates[i]);
+        combination.pop_back();
+        while (i < candidates.size() - 1 && candidates[i] == candidates[i+1]) {
             i++;
         }
-        combinationSum2(candidates, nums, target, i+1);
+        backtrack(candidates, combination, i+1, target) ;
     }
 };
+
