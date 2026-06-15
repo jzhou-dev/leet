@@ -3,32 +3,16 @@
 class Solution {
 public:
     void rotate(vector<int>& nums, int k) {
-      if (nums.size() % 2 == 0) {
-
-        int j = 0;
-        int swap = nums[0];
-        for (int i = 0; i < ceil(nums.size()/2); i++) {
+      int numCycles = gcd(nums.size(), k);
+      cout << numCycles << endl;
+      for (int i = 0; i < numCycles; i++) {
+        int j = i;
+        int temp = nums[j];
+        for (int x = 0; x < nums.size() / numCycles; x++) {
           j = (j + k) % nums.size();
-          int temp = nums[j];
-          nums[j] = swap;
-          swap = temp;
-        }
-        j = 1;
-        swap = nums[1];
-        for (int i = 0; i < nums.size() / 2; i++) {
-          j = (j + k) % nums.size();
-          int temp = nums[j];
-          nums[j] = swap;
-          swap = temp;
-        }
-      } else {
-        int j = 0;
-        int swap = nums[0];
-        for (int i = 0; i < nums.size(); i++) {
-          j = (j + k) % nums.size();
-          int temp = nums[j];
-          nums[j] = swap;
-          swap = temp;
+          int swap = nums[j];
+          nums[j] = temp;
+          temp = swap;
         }
       }
     }
