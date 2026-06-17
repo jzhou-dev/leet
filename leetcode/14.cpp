@@ -2,16 +2,23 @@
 
 class Solution {
 public:
-    bool hasCycle(ListNode *head) {
-        ListNode *slow = head;
-        ListNode *fast = head;
-        while (fast && fast->next) {
-            slow = slow->next;
-            fast = fast->next->next;
-            if (slow == fast) {
-                return true;
+    string longestCommonPrefix(vector<string>& strs) {
+        string prefix = "";
+        for (int i = 0; i < strs[0].size(); i++) {
+          char curr = strs[0][i];
+          bool common = true;
+          for (int j = 0; j < strs.size(); j++) {
+            if (strs[j][i] != strs[0][i]) {
+              common = false;
+              break;
             }
+          }
+          if (common) {
+            prefix.push_back(strs[0][i]);
+          } else {
+            break;
+          }
         }
-        return false;
+        return prefix;
     }
 };
