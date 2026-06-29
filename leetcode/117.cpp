@@ -1,31 +1,23 @@
-#include "leet.h"
+#include "../leet.h"
 
 class Solution {
 public:
-    Node* connect(Node* root) {
-        if (root == nullptr) {
-            return nullptr;
-        }
-        vector<Node*> lastNodes = {nullptr};
-        int depth = 0;
-        helper(root, lastNodes, depth);
-        return root;
-
+  std::vector<Node *> levels;
+  Node *connect(Node *root) {
+    connect(root, 0);
+    return root;
+  }
+  void connect(Node *root, int level) {
+    if (!root) {
+      return;
     }
-    void helper(Node* root, vector<Node*>& lastNodes, int depth) {
-        if (root == nullptr) {
-            return;
-        }
-        if (lastNodes.size()-1 < depth) {
-            lastNodes.push_back(root);
-        } else {
-            if (lastNodes[depth] != nullptr) {
-                lastNodes[depth]->next = root;
-            }
-            lastNodes[depth] = root;
-        }
-        helper(root->left, lastNodes, depth+1);
-        helper(root->right, lastNodes, depth+1);
+    if (level + 1 > levels.size()) {
+      levels.push_back(root);
+    } else {
+      levels[level]->next = root;
+      levels[level] = root;
     }
-    
-};      
+    connect(root->left, level + 1);
+    connect(root->right, level + 1);
+  }
+};
