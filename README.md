@@ -1,6 +1,6 @@
 # LC Stats
 
-![Problems Solved](https://img.shields.io/badge/solved-143-brightgreen)
+![Problems Solved](https://img.shields.io/badge/solved-145-brightgreen)
 ![Language](https://img.shields.io/badge/language-C++-blue)
 ![Last Updated](https://img.shields.io/badge/updated-2026--07--02-lightgrey)
 
