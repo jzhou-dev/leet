@@ -1,27 +1,28 @@
-#include "leet.h"
+#include "../leet.h"
 
 class Solution {
 public:
-    vector<vector<int>> result;
-    vector<vector<int>> permute(vector<int>& nums) {
-       vector<bool> used(nums.size(), false);
-       vector<int> permutation;
-       backtrack(nums, used, permutation);
-       return result; 
+  std::vector<std::vector<int>> permute(std::vector<int> &nums) {
+    std::vector<std::vector<int>> result;
+    std::vector<int> curr;
+    std::vector<bool> used(nums.size(), false);
+    permute(result, nums, used, curr);
+    return result;
+  }
+  void permute(std::vector<std::vector<int>> &result, std::vector<int> &nums,
+               std::vector<bool> &used, std::vector<int> &curr) {
+    if (curr.size() == nums.size()) {
+      result.push_back(curr);
+      return;
     }
-    void backtrack(vector<int>& nums, vector<bool>& used, vector<int>& permutation) {
-        if (permutation.size() == nums.size()) {
-            result.push_back(permutation);
-            return;
-        }
-        for (int i = 0; i < nums.size(); i++) {
-            if (!used[i]) {
-                permutation.push_back(nums[i]);
-                used[i] = true;
-                backtrack(nums, used, permutation);
-                used[i] = false;
-                permutation.pop_back();
-            }
-        }
+    for (int i = 0; i < nums.size(); ++i) {
+      if (!used[i]) {
+        used[i] = true;
+        curr.push_back(nums[i]);
+        permute(result, nums, used, curr);
+        curr.pop_back();
+        used[i] = false;
+      }
     }
+  }
 };
