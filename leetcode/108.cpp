@@ -1,18 +1,18 @@
-#include <unordered_set>
+#include "../leet.h"
 
-class Trie {
+class Solution {
 public:
-  std::unordered_set<std::string> words;
-  Trie() {}
-  void insert(std::string word) { words.insert(word); }
-  bool search(std::string word) { return words.count(word); }
-  bool startsWith(std::string prefix) {
-    for (auto word : words) {
-      if (word.size() >= prefix.size() &&
-          word.substr(0, prefix.size()) == prefix) {
-        return true;
-      }
+  TreeNode *sortedArrayToBST(std::vector<int> &nums) {
+    return sortedArrayToBST(nums, 0, nums.size() - 1);
+  }
+  TreeNode *sortedArrayToBST(std::vector<int> &nums, int left, int right) {
+    if (left > right) {
+      return nullptr;
     }
-    return false;
+    int mid = left + (right - left) / 2;
+    TreeNode *root = new TreeNode(nums[mid]);
+    root->left = sortedArrayToBST(nums, left, mid - 1);
+    root->right = sortedArrayToBST(nums, mid + 1, right);
+    return root;
   }
 };
