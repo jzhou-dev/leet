@@ -44,7 +44,7 @@ public:
   Node *construct(std::vector<std::vector<int>> &grid, std::pair<int, int> tl,
                   int len) {
     if (len == 1) {
-      return new Node(grid[tl.first][tl.second], 1);
+      return new Node(grid[tl.first][tl.second], true);
     }
     Node *topLeft = construct(grid, tl, len / 2);
     Node *topRight = construct(grid, {tl.first, tl.second + len / 2}, len / 2);
@@ -56,9 +56,10 @@ public:
         bottomRight->isLeaf && topLeft->val == topRight->val &&
         topRight->val == bottomLeft->val &&
         bottomLeft->val == bottomRight->val) {
-      return new Node(topLeft->val, 1);
+      return new Node(topLeft->val, true);
     } else {
-      return new Node(1, 0, topLeft, topRight, bottomLeft, bottomRight);
+      return new Node(topLeft->val, false, topLeft, topRight, bottomLeft,
+                      bottomRight);
     }
   }
 };

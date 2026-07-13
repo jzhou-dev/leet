@@ -4,27 +4,23 @@ class Solution {
 public:
   std::vector<std::vector<int>>
   merge(std::vector<std::vector<int>> &intervals) {
-    std::vector<std::vector<int>> result;
+    if (intervals.empty())
+      return intervals;
     std::sort(intervals.begin(), intervals.end());
-    int start = -1;
-    int end = -1;
-    for (const auto &interval : intervals) {
-      if (start == -1 && end == -1) {
-        start = interval[0];
-        end = interval[1];
-      } else if (interval[0] >= start && interval[0] <= end) {
-        if (interval[1] >= end) {
-          end = interval[1];
-        }
+    std::vector<std::vector<int>> result;
+    std::vector<int> curr = intervals[0];
+    for (int i = 1; i < intervals.size(); ++i) {
+      std::vector<int> interval = intervals[i];
+      if (curr[1] < interval[0]) {
+        result.push_back(curr);
+        curr = interval;
       } else {
-        result.push_back({start, end});
-        start = interval[0];
-        end = interval[1];
+        if (curr[1] < interval[1]) {
+          curr[1] = interval[1];
+        }
       }
     }
-    if (start != -1 && end != -1) {
-      result.push_back({start, end});
-    }
+    result.push_back(curr);
     return result;
   }
 };
