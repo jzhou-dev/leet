@@ -6,33 +6,31 @@ public:
                              std::vector<std::vector<int>> &prerequisites) {
     std::vector<std::vector<int>> adj(numCourses);
     std::vector<int> numReqs(numCourses);
-    for (auto req : prerequisites) {
-      adj[req[1]].push_back(req[0]);
-      numReqs[req[0]]++;
+    for (auto prereq : prerequisites) {
+      adj[prereq[1]].push_back(prereq[0]);
+      numReqs[prereq[0]]++;
     }
-    std::queue<int> queue;
+    std::queue<int> q;
     std::vector<int> result;
-    for (int i = 0; i < numReqs.size(); i++) {
+    for (int i = 0; i < numReqs.size(); ++i) {
       if (numReqs[i] == 0) {
-        queue.push(i);
+        q.push(i);
       }
     }
-    while (!queue.empty()) {
-      int course = queue.front();
-      queue.pop();
-      result.push_back(course);
+    while (!q.empty()) {
+      int course = q.front();
+      q.pop();
       numCourses--;
-      for (int i = 0; i < adj[course].size(); ++i) {
-        numReqs[adj[course][i]]--;
-        if (numReqs[adj[course][i]] == 0) {
-          queue.push(adj[course][i]);
+      result.push_back(course);
+      for (auto i : adj[course]) {
+        if (--numReqs[i] == 0) {
+          q.push(i);
         }
       }
     }
-    if (numCourses == 0) {
-      return result;
-    } else {
+    if (numCourses != 0) {
       return {};
     }
+    return result;
   }
 };
