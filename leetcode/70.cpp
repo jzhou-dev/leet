@@ -3,15 +3,15 @@
 class Solution {
 public:
   int climbStairs(int n) {
-    if (n == 0 || n == 1) {
+    if (n == 0 || n == 1)
       return 1;
+    vector<int> dp(2, 1);
+    for (int i = 2; i <= n; ++i) {
+      int temp = dp[1];
+      dp[1] = dp[0] + temp;
+      dp[0] = temp;
+      cout << dp[1] << endl;
     }
-    std::vector<int> steps(n + 1);
-    steps[0] = 1;
-    steps[1] = 1;
-    for (int i = 2; i < steps.size(); ++i) {
-      steps[i] = steps[i - 1] + steps[i - 2];
-    }
-    return steps.back();
+    return dp.back();
   }
 };

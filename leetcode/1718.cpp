@@ -2,7 +2,5 @@
 
 class Solution {
 public:
-    vector<int> constructDistancedSequence(int n) {
-        
-    }
+  vector<int> constructDistancedSequence(int n) {}
 };

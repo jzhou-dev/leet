@@ -3,17 +3,18 @@
 class Solution {
 public:
   bool wordBreak(std::string &s, std::vector<std::string> &wordDict) {
-    std::unordered_set<std::string> store(wordDict.begin(), wordDict.end());
-    int start = 0;
-    int len = 1;
-    while (start + len < s.size()) {
-      if (store.count(s.substr(start, len))) {
-        start += len;
-        len = 1;
-      } else {
-        len++;
+    vector<bool> dp(s.size() + 1, false);
+    dp[0] = true;
+    for (int i = 1; i < s.size(); ++i) {
+      for (int j = 0; j < wordDict.size(); ++j) {
+        int start = i - wordDict[j].size();
+        if (start >= 0 && dp[start - 1] &&
+            s.substr(start, i - start) == wordDict[j]) {
+          dp[i] = true;
+          break;
+        }
       }
     }
-    return !store.count(s.substr(start)) ? false : true;
+    return dp.back();
   }
 };
