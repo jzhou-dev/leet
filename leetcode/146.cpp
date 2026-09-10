@@ -1,68 +1,61 @@
+using namespace std;
 #include <unordered_map>
 
 struct Node {
   int key;
-  int value;
+  int val;
   Node *next;
   Node *prev;
-  Node() {
-    key = 0;
-    value = 0;
-    next = nullptr;
-    prev = nullptr;
-  }
-  Node(int _key, int _val) {
-    key = _key;
-    value = _val;
-    next = nullptr;
-    prev = nullptr;
-  }
+  Node() : key(), val(), next(), prev() {};
+  Node(int k, int v) : key(k), val(v), next(), prev() {};
 };
 
 class LRUCache {
 public:
-  Node *head;
-  Node *tail;
-  std::unordered_map<int, Node *> nodes;
-  int capacity = 0;
-  LRUCache(int capacity) {
-    head = new Node();
-    tail = new Node();
+  unordered_map<int, Node *> cache;
+  Node *head = new Node();
+  Node *tail = new Node();
+  int capacity;
+  int size = 0;
+  LRUCache(int _capacity) {
     head->next = tail;
     tail->prev = head;
-    this->capacity = capacity;
+    capacity = _capacity;
   }
-
   int get(int key) {
-    if (!nodes.count(key)) {
+    if (!cache.count(key))
       return -1;
+    Node *curr = cache[key];
+    if (curr->next != tail) {
+      if (curr->prev && curr->next) {
+        curr->prev->next = curr->next;
+        curr->next->prev = curr->prev;
+      }
+      curr->prev = tail->prev;
+      curr->next = tail;
+      tail->prev->next = curr;
+      tail->prev = curr;
     }
-    if (tail->prev == nodes[key]) {
-      return nodes[key]->value;
-    }
-    if (nodes[key]->prev && nodes[key]->next) {
-      nodes[key]->prev->next = nodes[key]->next;
-      nodes[key]->next->prev = nodes[key]->prev;
-    }
-    nodes[key]->prev = tail->prev;
-    nodes[key]->next = tail;
-    tail->prev->next = nodes[key];
-    tail->prev = nodes[key];
-    return nodes[key]->value;
+    return curr->val;
   }
-
   void put(int key, int value) {
-    if (nodes.count(key)) {
-      nodes[key]->value = value;
-      get(key);
-      return;
+    if (cache.count(key)) {
+      cache[key]->val = value;
+    } else {
+      if (cache.size() >= capacity) {
+        cache.erase(head->next->key);
+        head->next = head->next->next;
+        head->next->prev = head;
+      }
+      cache[key] = new Node(key, value);
     }
-    if (nodes.size() >= capacity) {
-      nodes.erase(head->next->key);
-      head = head->next;
-      head->prev = nullptr;
-    }
-    nodes.insert({key, new Node(key, value)});
     get(key);
   }
 };
+
+/**
+ * Your LRUCache object will be instantiated and called as such:
+ * LRUCache* obj = new LRUCache(capacity);
+ * int param_1 = obj->get(key);
+ * obj->put(key,value);
+ */
