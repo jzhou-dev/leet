@@ -1,35 +1,20 @@
-#include "../leet.h"
-
+#include "vector"
+using namespace std;
 class Solution {
 public:
-  std::string simplifyPath(std::string path) {
-    std::vector<std::string> stack;
-    std::string result;
-    int i = 0;
-    while (i < path.size()) {
-      std::string curr = "";
-      if (path[i] == '/') {
-        i++;
-      } else {
-        while (path[i] != '/' && i < path.size()) {
-          curr.push_back(path[i]);
-          i++;
-        }
-        if (curr == "..") {
-          if (!stack.empty()) {
-            stack.pop_back();
-          }
-        } else if (curr != ".") {
-          stack.push_back(curr);
-        }
-      }
+  int climbStairs(int n) {
+    if (n <= 1) {
+      return n;
     }
-    for (auto s : stack) {
-      result += "/" + s;
+    int p1 = 1;
+    int p2 = 1;
+    int curr = 0;
+    for (int i = 2; i <= n; ++i) {
+      int temp = curr;
+      curr = p1 + p2;
+      swap(p1, p2);
+      p2 = temp;
     }
-    if (result == "") {
-      result = "/";
-    }
-    return result;
+    return curr;
   }
 };

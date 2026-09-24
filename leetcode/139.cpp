@@ -1,17 +1,16 @@
-#include "../leet.h"
+#include <unordered_set>
+#include <vector>
+using namespace std;
 
 class Solution {
 public:
-  bool wordBreak(std::string &s, std::vector<std::string> &wordDict) {
-    vector<bool> dp(s.size() + 1, false);
-    dp[0] = true;
-    for (int i = 1; i < s.size(); ++i) {
-      for (int j = 0; j < wordDict.size(); ++j) {
-        int start = i - wordDict[j].size();
-        if (start >= 0 && dp[start - 1] &&
-            s.substr(start, i - start) == wordDict[j]) {
-          dp[i] = true;
-          break;
+  bool wordBreak(string s, vector<string> &wordDict) {
+    unordered_set<string> words(wordDict.begin(), wordDict.end());
+    vector<bool> dp(s.size(), false);
+    for (int i = 0; i < s.size(); ++i) {
+      for (int j = i; j < s.size(); ++j) {
+        if ((i == 0 || dp[i - 1]) && words.count(s.substr(i, j - i + 1))) {
+          dp[j] = true;
         }
       }
     }

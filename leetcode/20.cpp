@@ -1,31 +1,33 @@
-#include "../leet.h"
+#include <stack>
+using namespace std;
 
 class Solution {
 public:
-  bool isValid(std::string s) {
-    std::stack<char> stack;
+  bool isValid(string s) {
+    stack<char> store;
     for (auto c : s) {
-      if (c == '(' || c == '[' || c == '{') {
-        stack.push(c);
+      if (c == '(' || c == '{' || c == '[') {
+        store.push(c);
       } else {
-        if (stack.empty()) {
-          return false;
-        } else if (c == ')') {
-          if (stack.top() != '(') {
+        if (c == ')') {
+          if (store.empty() || store.top() != '(') {
             return false;
           }
+          store.pop();
+
         } else if (c == ']') {
-          if (stack.top() != '[') {
+          if (store.empty() || store.top() != '[') {
             return false;
           }
-        } else if (c == '}') {
-          if (stack.top() != '{') {
+          store.pop();
+        } else {
+          if (store.empty() || store.top() != '{') {
             return false;
           }
+          store.pop();
         }
-        stack.pop();
       }
     }
-    return stack.empty();
+    return store.empty();
   }
 };
