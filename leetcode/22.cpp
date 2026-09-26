@@ -1,42 +1,27 @@
-#include "../leet.h"
-
+#include <vector>
+using namespace std;
 class Solution {
 public:
-  std::vector<std::string> result;
-  std::vector<std::string> generateParenthesis(int n) {
-    std::string curr = "";
+  vector<string> result;
+  vector<string> generateParenthesis(int n) {
+    string curr = "";
     generateParenthesis(n, curr, 0, 0);
     return result;
   }
-  void generateParenthesis(int n, std::string curr, int open, int closed) {
-    if (open == n && closed == n) {
+  void generateParenthesis(int n, string &curr, int left, int right) {
+    if (curr.size() == n * 2) {
       result.push_back(curr);
       return;
     }
-    if (open < n) {
+    if (left < n) {
       curr.push_back('(');
-      generateParenthesis(n, curr, open + 1, closed);
+      generateParenthesis(n, curr, left + 1, right);
       curr.pop_back();
     }
-    if (closed < open) {
+    if (right < left) {
       curr.push_back(')');
-      generateParenthesis(n, curr, open, closed + 1);
+      generateParenthesis(n, curr, left, right + 1);
       curr.pop_back();
     }
-  }
-  bool validParenthesis(std::string curr) {
-    int closed = 0;
-    while (!curr.empty()) {
-      if (curr.back() == ')') {
-        closed++;
-      } else {
-        closed--;
-      }
-      if (closed < 0) {
-        return false;
-      }
-      curr.pop_back();
-    }
-    return true;
   }
 };

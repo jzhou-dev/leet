@@ -1,26 +1,24 @@
-#include "../leet.h"
-
+#include <vector>
+using namespace std;
 class Solution {
 public:
-  std::vector<std::vector<int>> result;
-  std::vector<std::vector<int>> combinationSum(std::vector<int> &candidates,
-                                               int target) {
-    std::vector<int> sum;
-    combinationSum(candidates, sum, 0, target);
+  vector<vector<int>> result;
+  vector<vector<int>> combinationSum(vector<int> &candidates, int target) {
+    vector<int> curr;
+    combinationSum(candidates, target, curr, 0);
     return result;
   }
-  void combinationSum(std::vector<int> &candidates, std::vector<int> &sum,
-                      int start, int target) {
-    if (target <= 0) {
+  void combinationSum(vector<int> &candidates, int target, vector<int> &curr,
+                      int i) {
+    if (target <= 0 || i >= candidates.size()) {
       if (target == 0) {
-        result.push_back(sum);
+        result.push_back(curr);
       }
       return;
     }
-    for (int i = start; i < candidates.size(); ++i) {
-      sum.push_back(candidates[i]);
-      combinationSum(candidates, sum, i, target - candidates[i]);
-      sum.pop_back();
-    }
+    curr.push_back(candidates[i]);
+    combinationSum(candidates, target - candidates[i], curr, i);
+    curr.pop_back();
+    combinationSum(candidates, target, curr, i + 1);
   }
 };
