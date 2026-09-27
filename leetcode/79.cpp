@@ -1,44 +1,39 @@
-#include "../leet.h"
+#include <vector>
+using namespace std;
 
 class Solution {
 public:
-  bool exist(std::vector<std::vector<char>> &board, std::string word) {
+  vector<pair<int, int>> directions = {{0, 1}, {1, 0}, {0, -1}, {-1, 0}};
+  bool exist(vector<vector<char>> &board, string word) {
     for (int i = 0; i < board.size(); ++i) {
       for (int j = 0; j < board[i].size(); ++j) {
-        if (board[i][j] == word[0]) {
-          std::string curr = "";
-          if (exist(board, word, curr, i, j)) {
-            return true;
-          }
+        if (board[i][j] == word[0] && exist(board, word, 0, {i, j})) {
+          return true;
         }
       }
     }
     return false;
   }
-  bool exist(std::vector<std::vector<char>> &board, std::string &word,
-             std::string &curr, int i, int j) {
-    if (curr.size() == word.size()) {
-      if (curr == word) {
-        return true;
-      }
+  bool exist(vector<vector<char>> &board, string &word, int i,
+             pair<int, int> b_i) {
+    if (i == word.size()) {
+      return true;
+    }
+    if (b_i.first >= board.size() || b_i.first < 0 ||
+        b_i.second >= board[0].size() || b_i.second < 0 ||
+        board[b_i.first][b_i.second] == '.' ||
+        board[b_i.first][b_i.second] != word[i]) {
       return false;
     }
-    if (i >= board.size() || i < 0 || j >= board[0].size() || j < 0 ||
-        board[i][j] == '#') {
-      return false;
+    char temp = board[b_i.first][b_i.second];
+    board[b_i.first][b_i.second] = '.';
+    bool result = false;
+    for (auto direction : directions) {
+      result = result || exist(board, word, i + 1,
+                               {b_i.first + direction.first,
+                                b_i.second + direction.second});
     }
-    if (curr.size() > 0 && curr.back() != word[curr.size() - 1]) {
-      return false;
-    }
-    char c = board[i][j];
-    board[i][j] = '#';
-    curr.push_back(c);
-    bool result = exist(board, word, curr, i + 1, j) ||
-                  exist(board, word, curr, i, j + 1) ||
-                  exist(board, word, curr, i - 1, j) ||
-                  exist(board, word, curr, i, j - 1);
-    board[i][j] = c;
-    curr.pop_back();
+    board[b_i.first][b_i.second] = temp;
     return result;
   }
 };
