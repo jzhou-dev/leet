@@ -1,27 +1,27 @@
-#include "../leet.h"
+#include <vector>
+using namespace std;
 
 class Solution {
 public:
-  std::vector<std::vector<int>> permute(std::vector<int> &nums) {
-    std::vector<std::vector<int>> result;
-    std::vector<int> curr;
-    std::vector<bool> used(nums.size(), false);
-    permute(result, nums, used, curr);
+  vector<vector<int>> result;
+  vector<vector<int>> permute(vector<int> &nums) {
+    vector<int> curr;
+    vector<bool> used(nums.size(), false);
+    permute(nums, curr, used);
     return result;
   }
-  void permute(std::vector<std::vector<int>> &result, std::vector<int> &nums,
-               std::vector<bool> &used, std::vector<int> &curr) {
+  void permute(vector<int> &nums, vector<int> &curr, vector<bool> &used) {
     if (curr.size() == nums.size()) {
       result.push_back(curr);
       return;
     }
-    for (int i = 0; i < nums.size(); ++i) {
-      if (!used[i]) {
-        used[i] = true;
-        curr.push_back(nums[i]);
-        permute(result, nums, used, curr);
+    for (int j = 0; j < nums.size(); ++j) {
+      if (!used[j]) {
+        used[j] = true;
+        curr.push_back(nums[j]);
+        permute(nums, curr, used);
+        used[j] = false;
         curr.pop_back();
-        used[i] = false;
       }
     }
   }
