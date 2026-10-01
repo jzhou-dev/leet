@@ -4,19 +4,19 @@ using namespace std;
 class Solution {
 public:
   int minPathSum(vector<vector<int>> &grid) {
-    for (int i = grid.size() - 1; i >= 0; --i) {
-      for (int j = grid[i].size() - 1; j >= 0; --j) {
-        int min_path = INT_MAX;
-        if (i == grid.size() - 1 && j == grid[i].size() - 1)
-          continue;
-        else if (i == grid.size() - 1)
-          grid[i][j] += grid[i][j + 1];
-        else if (j == grid[i].size() - 1)
-          grid[i][j] += grid[i + 1][j];
-        else
-          grid[i][j] += min(grid[i][j + 1], grid[i + 1][j]);
+    vector<vector<int>> dp(grid.size(), vector<int>(grid[0].size()));
+    dp[0][0] = grid[0][0];
+    for (int i = 1; i < grid.size(); ++i) {
+      dp[i][0] = dp[i - 1][0] + grid[i][0];
+    }
+    for (int i = 1; i < grid[0].size(); ++i) {
+      dp[0][i] = dp[0][i - 1] + grid[0][i];
+    }
+    for (int i = 1; i < grid.size(); ++i) {
+      for (int j = 1; j < grid[0].size(); ++j) {
+        dp[i][j] = min(dp[i - 1][j], dp[i][j - 1]) + grid[i][j];
       }
     }
-    return -1;
+    return dp[grid.size() - 1][grid[0].size() - 1];
   }
 };
