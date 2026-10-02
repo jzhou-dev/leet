@@ -1,55 +1,48 @@
-using namespace std;
 #include <unordered_map>
 
 struct Node {
   int key;
-  int val;
+  int value;
   Node *next;
   Node *prev;
-  Node() : key(), val(), next(), prev() {};
-  Node(int k, int v) : key(k), val(v), next(), prev() {};
+  Node() : key(0), value(0) {};
+  Node(int _key, int _value) : key(_key), value(_value) {};
 };
-
 class LRUCache {
 public:
-  unordered_map<int, Node *> cache;
-  Node *head = new Node();
-  Node *tail = new Node();
+  std::unordered_map<int, Node *> cache;
+  Node *head;
+  Node *tail;
   int capacity;
-  int size = 0;
-  LRUCache(int _capacity) {
+  LRUCache(int capacity) {
+    this->capacity = capacity;
+    head = new Node(0, 0);
+    tail = new Node(0, 0);
     head->next = tail;
     tail->prev = head;
-    capacity = _capacity;
   }
+
   int get(int key) {
-    if (!cache.count(key))
+    if (!cache.count(key)) {
       return -1;
+    }
     Node *curr = cache[key];
-    if (curr->next != tail) {
-      if (curr->prev && curr->next) {
-        curr->prev->next = curr->next;
+    if (tail->prev != curr) {
+      if (curr->next && curr->prev) {
         curr->next->prev = curr->prev;
+        curr->prev->next = curr->next;
       }
       curr->prev = tail->prev;
       curr->next = tail;
       tail->prev->next = curr;
       tail->prev = curr;
     }
-    return curr->val;
+    return curr->value;
   }
+
   void put(int key, int value) {
-    if (cache.count(key)) {
-      cache[key]->val = value;
-    } else {
-      if (cache.size() >= capacity) {
-        cache.erase(head->next->key);
-        head->next = head->next->next;
-        head->next->prev = head;
-      }
-      cache[key] = new Node(key, value);
+    if (cache.size() >= capacity) {
     }
-    get(key);
   }
 };
 
