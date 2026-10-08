@@ -14,9 +14,7 @@ public:
         min_sqrs = min(min_sqrs, dp[i - (curr_sqr * curr_sqr)] + 1);
         curr_sqr++;
       }
-    }
-    for (auto i : dp) {
-      cout << i << ' ';
+      dp[i] = min_sqrs;
     }
     return dp.back();
   }
