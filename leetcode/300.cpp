@@ -18,13 +18,10 @@ public:
         if (i - coins[j] >= 0 && (dp[i - coins[j]] != 0 || i - coins[j] == 0)) {
           curr_min = min(curr_min, dp[i - coins[j]] + 1);
         }
-        if (curr_min != INT_MAX) {
-          dp[i] = curr_min;
-        }
       }
-    }
-    for (auto i : dp) {
-      cout << i << ' ';
+      if (curr_min != INT_MAX) {
+        dp[i] = curr_min;
+      }
     }
     return dp.back() == 0 ? -1 : dp.back();
   }

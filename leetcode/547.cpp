@@ -1,7 +1,6 @@
-#include <iostream>
+using namespace std;
 #include <unordered_set>
 #include <vector>
-using namespace std;
 
 class Solution {
 public:
@@ -14,30 +13,32 @@ public:
     }
     for (int i = 0; i < isConnected.size(); ++i) {
       for (int j = 0; j < isConnected[i].size(); ++j) {
-        if (isConnected[i][j] == 1) {
+        if (isConnected[i][j]) {
           _union(parents, rank, i, j);
         }
       }
     }
-    unordered_set<int> provinces;
-    for (int i = 0; i < parents.size(); ++i) {
-      provinces.insert(find(parents, parents[i]));
+    unordered_set<int> count;
+    for (auto parent : parents) {
+      count.insert(find(parents, parent));
     }
-    return provinces.size();
+    return count.size();
   }
-  int find(vector<int> &parents, int curr) {
-    if (parents[curr] != curr) {
-      parents[curr] = find(parents, parents[curr]);
+  void _union(vector<int> &parents, vector<int> &rank, int i, int j) {
+    int pi = find(parents, i);
+    int pj = find(parents, j);
+    if (rank[j] < rank[i]) {
+      swap(pi, pj);
+      rank[pj]++;
     }
-    return parents[curr];
+    if (pi != pj) {
+      parents[pi] = pj;
+    }
   }
-  void _union(vector<int> &parents, vector<int> &rank, int src, int dest) {
-    src = find(parents, src);
-    dest = find(parents, dest);
-    if (rank[src] < rank[dest]) {
-      swap(src, dest);
+  int find(vector<int> &parents, int i) {
+    if (parents[i] != i) {
+      parents[i] = find(parents, parents[i]);
     }
-    parents[dest] = src;
-    rank[src]++;
+    return parents[i];
   }
 };
